@@ -1,29 +1,40 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_print.c                                         :+:      :+:    :+:   */
+/*   ft_fill.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: tarthas <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2020/03/16 13:04:53 by tarthas           #+#    #+#             */
-/*   Updated: 2020/03/16 17:45:35 by tarthas          ###   ########.fr       */
+/*   Created: 2020/03/16 12:31:28 by tarthas           #+#    #+#             */
+/*   Updated: 2020/03/16 19:07:31 by tarthas          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
+#include <stdio.h>
 #include "ft_bsq.h"
 
-void	ft_print(char **map)
+char	**ft_fill(char **s, t_type result, char fill)
 {
-	while (*map)
+	int		i;
+	int		j;
+
+	i = result.x;
+	//j = result.y;
+	while (i > result.x - result.max)
 	{
-		while (**map != '\0')
+		j = result.y;
+		while (j > result.y - result.max)
 		{
-			write(1, (*map), 1);
-			(*map)++;
+			*(s[i] + j) = fill;
+			char c = *(s[i] + j);
+			//c = 'o';
+			printf("%d %d\n", i, j);
+			printf("%s\n", s[i] + j);
+			write(1, &c, 1);
+			write(1, "\n", 1);
+			j--;
 		}
-		write(1, "\n", 1);
-		map++;
+		i--;
 	}
-	write(1, "\n", 1);
-	return ;
+	return (s);
 }

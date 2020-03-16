@@ -6,11 +6,11 @@
 /*   By: tarthas <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/03/16 14:56:46 by tarthas           #+#    #+#             */
-/*   Updated: 2020/03/16 15:27:51 by tarthas          ###   ########.fr       */
+/*   Updated: 2020/03/16 16:57:49 by tarthas          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "ft_find.h"
+#include "ft_bsq.h"
 
 int ft_min(int a, int b, int c)
 {
