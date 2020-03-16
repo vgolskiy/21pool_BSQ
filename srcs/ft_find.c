@@ -6,14 +6,14 @@
 /*   By: tarthas <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/03/16 13:49:07 by tarthas           #+#    #+#             */
-/*   Updated: 2020/03/16 15:36:34 by tarthas          ###   ########.fr       */
+/*   Updated: 2020/03/16 15:46:58 by tarthas          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ft_bsq.h"
 
 
-t_type ft_find(char **s, int row_num, int col_num, char obst, char fill)
+t_type ft_find(char **s, int row_num, int col_num, char obst)
 {
 	int **tmp;
 	int i_row;
@@ -22,6 +22,7 @@ t_type ft_find(char **s, int row_num, int col_num, char obst, char fill)
 
 	i_col = 0;
 	i_row = 0;
+	//Инициализация временного массива для хранения результатов расчета и сразу запись 1 столбца.
 	tmp = (int**)malloc(row_num * sizeof(int*));
 	while (i_row < row_num)
 	{

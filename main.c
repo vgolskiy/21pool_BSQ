@@ -6,9 +6,11 @@
 /*   By: tarthas <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/03/16 10:17:42 by tarthas           #+#    #+#             */
-/*   Updated: 2020/03/16 14:15:15 by tarthas          ###   ########.fr       */
+/*   Updated: 2020/03/16 15:55:13 by tarthas          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
+
+#include "ft_bsq.h"
 
 int main(int argc, char **argv)
 {
@@ -19,55 +21,14 @@ int main(int argc, char **argv)
 	//Считывание параметров map, в итоге obst = символ препятсвия, fill = символ заполнения.
 	
 
-	while (argc - i_arg > 0)
+	while (argc - i_arg > 0)//Здесь подставлем по очереди все map
 	{
-		//Инициализация временного массива для хранения результатов расчета
-		tmp = (int**)malloc(n * sizeof(int*));
-		while (i_row < n)
-		{
-			*tmp[i_row] = (int*)malloc(sizeof(int) * col_num);
-			i_row++;
-		}
-
-		//Присваиваем 1 столбец исходной карты промежуточному массиву(надо ли если исходный массив 1 стр?)
-		while (i_row < n)
-		{
-			if (*s[i_row] == obst)
-				*tmp[i_row] = 0;
-			*tmp[i_row] = 1;
-			i_row++;
-		}
-		//Присваиваем 1 строку исходной карты промежуточному массиву(надо ли если исходный массив 1 стр? Или 1 столбец?)
-		while (i_col < col_num)
-		{
-			if (*(s[0] + i_col) == obst)
-				*(tmp[0] + i_col) = 0;
-			*(tmp[0] + i_col) = 1;
-			i_col++;
-		}
-		//Заполняем промежуточный массив значениями "уголков"
-		i_row = 1;
-		i_col = 1;
-		while (i_row < n)
-		{
-			while (i_col < col_num)
-			{
-				if (*(s[i_row] + i_col) != obst)
-				{
-					*(tmp[i_row] + i_col) = min(*(tmp[i_row] + i_col - 1), *(tmp[i_row - 1] + i_col), *(tmp[i_row - 1] + i_col - 1)) + 1;	
-				}
-				else
-					*(tmp[i_row] + i_col) = 0;
-				i_col++;
-			}
-			i_row++;
-		}
-		//Посик максимального значения во временной матрице
-		t_type result;
-		result = ft_max(tmp, n, col_num);
-
-		//Функция заполнения map с заполненным квадратом
+		t_type res;
+		res = ft_find(s, row_num, col_num, obst);
+		s = ft_fill(s, res);
+		ft_print(s);
 	}
+return (0);
 }
 
 
