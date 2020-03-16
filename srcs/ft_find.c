@@ -6,18 +6,19 @@
 /*   By: tarthas <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/03/16 13:49:07 by tarthas           #+#    #+#             */
-/*   Updated: 2020/03/16 14:56:18 by tarthas          ###   ########.fr       */
+/*   Updated: 2020/03/16 15:36:34 by tarthas          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ft_bsq.h"
 
 
-int ft_find(char **s, int row_num, int col_num, char obst, char fill)
+t_type ft_find(char **s, int row_num, int col_num, char obst, char fill)
 {
 	int **tmp;
 	int i_row;
 	int i_col;
+	t_type result;
 
 	i_col = 0;
 	i_row = 0;
@@ -59,7 +60,9 @@ int ft_find(char **s, int row_num, int col_num, char obst, char fill)
 		{
 			if (*(s[i_row] + i_col) != obst)
 			{
-				*(tmp[i_row] + i_col) = min(*(tmp[i_row] + i_col - 1), *(tmp[i_row - 1] + i_col), *(tmp[i_row - 1] + i_col - 1)) + 1;
+				*(tmp[i_row] + i_col) = ft_min(*(tmp[i_row] + i_col - 1),
+					   	*(tmp[i_row - 1] + i_col),
+					   	*(tmp[i_row - 1] + i_col - 1)) + 1;
 			}
 			else
 				*(tmp[i_row] + i_col) = 0;
@@ -68,6 +71,7 @@ int ft_find(char **s, int row_num, int col_num, char obst, char fill)
 		i_row++;
 	}
 	//Посик максимального значения во временной матрице
-	t_type result;
-	result = ft_max(tmp, n, col_num);
+	result = ft_max(tmp, row_num, col_num);
+	free(tmp);
+	return(result);
 }
