@@ -6,7 +6,7 @@
 /*   By: vladimirgolskiy <vladimirgolskiy@studen    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/03/16 15:21:06 by mskinner          #+#    #+#             */
-/*   Updated: 2020/03/17 11:53:12 by vladimirgol      ###   ########.fr       */
+/*   Updated: 2020/03/17 11:59:16 by vladimirgol      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,27 +14,9 @@
 #include <sys/stat.h>
 #include <fcntl.h>  
 #include <stdlib.h>
-#include <errno.h>
 #include "ft_box_struct.h"
 #include <unistd.h>
 #include <stdio.h>
-
-int		ft_size(char *str)
-{
-	int i;
-
-	i = 0;
-	while (str[i] != '\0')
-		i++;
-	return (i);
-}
-
-void	ft_error(char *file_name)
-{
-	write(2, file_name, ft_size(file_name));
-	write(2, ": Permission denied or no such file or it's a directory\n", 56);
-	return ;
-}
 
 t_box	ft_get_struct(char *file_name)
 {
@@ -121,7 +103,7 @@ int		main(int ac, char **av)
 	{
 		fd = open(av[i], O_RDWR);
 		if (fd < 0)
-			ft_error(av[i]);
+			write(2, "map error\n", 10);
 		else
 		{
 			res = ft_get_struct(av[i]);
