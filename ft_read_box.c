@@ -3,15 +3,15 @@
 /*                                                        :::      ::::::::   */
 /*   ft_read_box.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mskinner <mskinner@student.42.fr>          +#+  +:+       +#+        */
+/*   By: vladimirgolskiy <vladimirgolskiy@studen    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/03/16 15:21:06 by mskinner          #+#    #+#             */
-/*   Updated: 2020/03/16 22:33:47 by mskinner         ###   ########.fr       */
+/*   Updated: 2020/03/17 11:53:12 by vladimirgol      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include<sys/types.h>
-#include<sys/stat.h>
+#include <sys/types.h>
+#include <sys/stat.h>
 #include <fcntl.h>  
 #include <stdlib.h>
 #include <errno.h>
@@ -29,15 +29,10 @@ int		ft_size(char *str)
 	return (i);
 }
 
-void	ft_error(char *file_name, int n)
+void	ft_error(char *file_name)
 {
-	write(1, file_name, ft_size(file_name));
-	if (n == 13)
-		write(2, ": Permission denied\n", 20);
-	if (n == 21)
-		write(2, ": Is a directory\n", 17);
-	else if (n == 2)
-		write(2, ": No such file or directory\n", 28);
+	write(2, file_name, ft_size(file_name));
+	write(2, ": Permission denied or no such file or it's a directory\n", 56);
 	return ;
 }
 
@@ -119,16 +114,27 @@ int		main(int ac, char **av)
 	char	**box;
 	int		i;
 	t_box	res;
+	int		fd;
 
-
-	i = 0;
-	res = ft_get_struct(av[1]);
+	i = 1;
+	while (i < ac)
+	{
+		fd = open(av[i], O_RDWR);
+		if (fd < 0)
+			ft_error(av[i]);
+		else
+		{
+			res = ft_get_struct(av[i]);
+			res.box = ft_get_box(av[i], res.n);
+		}
+		i++;
+	}
 	printf("%d", res.n);
 	printf("%c", res.empty);
 	printf("%c", res.sep);
 	printf("%c", res.fill);
-	printf("%c", '\n');	
-	res.box = ft_get_box(av[1], res.n);
+	printf("%c", '\n');
+	i = 0;
 	while (res.box[i])
 	{
 		printf("%s", res.box[i]);
