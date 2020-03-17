@@ -6,7 +6,7 @@
 /*   By: vladimirgolskiy <vladimirgolskiy@studen    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/03/16 15:21:06 by mskinner          #+#    #+#             */
-/*   Updated: 2020/03/17 13:15:35 by vladimirgol      ###   ########.fr       */
+/*   Updated: 2020/03/17 13:40:37 by vladimirgol      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,7 +34,7 @@ t_box	ft_get_struct(char *file_name)
 	int		fd;
 	int		n;
 	int		q;
-	char	sym[3];
+	char	sym[4];
 	t_box	res;
 
 	n = 0;
@@ -44,13 +44,16 @@ t_box	ft_get_struct(char *file_name)
 	{
 		if ((buf >= 48) && (buf <= 57))
 			n = n * 10 + (buf - '0');
-		else if (n > 0)
+		else if ((n > 0) && (q <= 4))
 			sym[q++] = buf;
 	}
-	res.n = n;
-	res.empty = sym[0];
-	res.sep = sym[1];
-	res.fill = sym[2];	
+	if ((n != 0) && (ft_size(sym) == 3))
+	{
+		res.n = n;
+		res.empty = sym[0];
+		res.sep = sym[1];
+		res.fill = sym[2];
+	}
 	return (res);
 }
 
@@ -132,23 +135,28 @@ void	ft_files_in(int ac, char **av)
 		else
 		{
 			res = ft_get_struct(av[i]);
-			box = (char **)malloc((res.n + 1) * sizeof(char *));
-			res.box = ft_get_box(box, av[i], res.n);
-			if (!res.box)
+			if (res.n == 0)
 				write(2, "map error\n", 10);
 			else
 			{
-				printf("%d", res.n);
-				printf("%c", res.empty);
-				printf("%c", res.sep);
-				printf("%c", res.fill);
-				printf("%c", '\n');
-				j = 0;
-				while (res.box[j])
+				box = (char **)malloc((res.n + 1) * sizeof(char *));
+				res.box = ft_get_box(box, av[i], res.n);
+				if (!res.box)
+					write(2, "map error\n", 10);
+				else
 				{
-					printf("%s", res.box[j]);
+					printf("%d", res.n);
+					printf("%c", res.empty);
+					printf("%c", res.sep);
+					printf("%c", res.fill);
 					printf("%c", '\n');
-					j++;
+					j = 0;
+					while (res.box[j])
+					{
+						printf("%s", res.box[j]);
+						printf("%c", '\n');
+						j++;
+					}
 				}
 			}
 		}
