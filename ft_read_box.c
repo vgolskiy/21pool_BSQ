@@ -6,7 +6,7 @@
 /*   By: vladimirgolskiy <vladimirgolskiy@studen    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/03/16 15:21:06 by mskinner          #+#    #+#             */
-/*   Updated: 2020/03/17 11:59:16 by vladimirgol      ###   ########.fr       */
+/*   Updated: 2020/03/17 13:15:35 by vladimirgol      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,6 +17,16 @@
 #include "ft_box_struct.h"
 #include <unistd.h>
 #include <stdio.h>
+
+int		ft_size(char *str)
+{
+	int i;
+
+	i = 0;
+	while (str[i] != '\0')
+		i++;
+	return (i);
+}
 
 t_box	ft_get_struct(char *file_name)
 {
@@ -62,16 +72,28 @@ char	*ft_strcpy(char *orig, char buf, int qty)
 	return (res);
 }
 
-char	**ft_get_box(char *file_name, int n)
+int		ft_map_check(char **s, int n)
+{
+	int i;
+
+	i = 1;
+	while (i < n - 1)
+	{
+		if (ft_size(s[i-1]) != ft_size(s[i]))
+			return (1);
+		i++;
+	}
+	return (0);
+}
+
+char	**ft_get_box(char ** res, char *file_name, int n)
 {
 	char	buf;
 	int		fd;
 	int		qty;
 	int		rows;
-	char	**res;
 
 	rows = 0;
-	res = (char **)malloc((n + 1) * sizeof(char *));
 	fd = open(file_name, O_RDONLY);
 	while (read(fd, &buf, 1) && (rows <= n + 1))
 	{
@@ -87,14 +109,17 @@ char	**ft_get_box(char *file_name, int n)
 	}
 	if ((rows < n) || (rows > n + 1))
 		return (0);
+	if (ft_map_check(res, n))
+		return (0);
 	res[rows - 1] = 0;
 	return (res);
 }
 
-int		main(int ac, char **av)
+void	ft_files_in(int ac, char **av)
 {
 	char	**box;
 	int		i;
+	int		j;
 	t_box	res;
 	int		fd;
 
@@ -107,21 +132,33 @@ int		main(int ac, char **av)
 		else
 		{
 			res = ft_get_struct(av[i]);
-			res.box = ft_get_box(av[i], res.n);
+			box = (char **)malloc((res.n + 1) * sizeof(char *));
+			res.box = ft_get_box(box, av[i], res.n);
+			if (!res.box)
+				write(2, "map error\n", 10);
+			else
+			{
+				printf("%d", res.n);
+				printf("%c", res.empty);
+				printf("%c", res.sep);
+				printf("%c", res.fill);
+				printf("%c", '\n');
+				j = 0;
+				while (res.box[j])
+				{
+					printf("%s", res.box[j]);
+					printf("%c", '\n');
+					j++;
+				}
+			}
 		}
 		i++;
 	}
-	printf("%d", res.n);
-	printf("%c", res.empty);
-	printf("%c", res.sep);
-	printf("%c", res.fill);
-	printf("%c", '\n');
-	i = 0;
-	while (res.box[i])
-	{
-		printf("%s", res.box[i]);
-		printf("%c", '\n');
-		i++;
-	}
+	return ;
+}
+
+int		main(int ac, char **av)
+{
+	ft_files_in(ac, av);
 	return (0);
 }
